@@ -307,7 +307,7 @@ dev.off()
 
 # Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti
 pdf("results_de_analysis/cnetplot_ego.pdf")
-cnetplot(ego, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)], showCategory = 10)
+cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)], showCategory = 10)
 dev.off()
 
 
@@ -329,12 +329,6 @@ gda <- read_tsv(gzfile("/workspace/class-rnaseq/datasets_reference_only/trascrip
 disease2gene = gda[, c("diseaseId", "geneId")]
 disease2name = gda[, c("diseaseId", "diseaseName")]
 
-# Arricchimento funzionale con enrcher(), funzione del pacchetto clusterProfiler
-# entrez_genes_sig --> vettore di ID dei geni significativi
-disgnet = enricher(entrez_genes_sig, 
-                   TERM2GENE = disease2gene, 
-                   TERM2NAME = disease2name)
-
 # Creazione di un universo di geni che contanga per ogni gene annotato nel genoma umano (org.Hs.eg.db):
 # ENTREZID --> ID assegnato da NCBI Entrez Gene
 # SYMBOL --> simbolo del gene
@@ -351,6 +345,13 @@ universe <- AnnotationDbi::select(org.Hs.eg.db,
 # universe$ENSEMBL %in% sig_genes --> verifica se gli ID ENSEMBL sono presenti tra i geni significativi
 # $ENTREZID --> restituisce gli ID Entrez corrispondenti ai geni significativi
 entrez_genes_sig <- unique(universe[which(universe$ENSEMBL %in% sig_genes),]$ENTREZID)
+
+# Arricchimento funzionale con enrcher(), funzione del pacchetto clusterProfiler
+# entrez_genes_sig --> vettore di ID dei geni significativi
+disgnet = enricher(entrez_genes_sig, 
+                   TERM2GENE = disease2gene, 
+                   TERM2NAME = disease2name)
+
 
 # Creazione di un gene-concept network per visualizzare le relazioni tra le malattie e i geni significativi associati
 # foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)] --> specifica il log2FoldChange per ciascun gene significativo (padj < 0.5)
