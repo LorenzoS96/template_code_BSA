@@ -307,7 +307,7 @@ dev.off()
 
 # Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti
 pdf("results_de_analysis/cnetplot_ego.pdf")
-cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)], showCategory = 10)
+cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
 
 
@@ -356,7 +356,7 @@ disgnet = enricher(entrez_genes_sig,
 # Creazione di un gene-concept network per visualizzare le relazioni tra le malattie e i geni significativi associati
 # foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)] --> specifica il log2FoldChange per ciascun gene significativo (padj < 0.5)
 pdf("results_de_analysis/cnetplot_disgnet.pdf")
-cnetplot(disgnet, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)], showCategory = 10)
+cnetplot(disgnet, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
 
 
