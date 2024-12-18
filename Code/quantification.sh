@@ -24,6 +24,10 @@ ln -s /workspace/class-rnaseq/dataset_tutoring_rnaseq01/raw_data/* .
 # Quantificazione #
 ###################
 
+# Provare a eseguire salmon digitando "salmon" sul terminale
+# A volte il comando potrebbe fallire sul terminale di RStudio su Codespaces
+# Per risolvere digitare il comando: export PATH=${PATH}:/usr/local/bin
+
 
 # Ciclo attraverso tutti i file che terminano con "_1.fasta.gz"
 for sample in *_1.fasta.gz
