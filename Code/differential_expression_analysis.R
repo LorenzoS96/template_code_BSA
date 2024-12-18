@@ -370,6 +370,7 @@ dev.off()
 rm -rf */.git
 rm -r dataset_tutoring_rnaseq01
 rm -r analysis_tutoring01/reads
+rm analysis_tutoring01/tutoring01.RData 
 
 git add *
 git commit -m "analisi RNA-Seq primo tutorato"
