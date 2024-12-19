@@ -3,11 +3,6 @@
 ####################################
 
 
-# Da TERMINALE creazione cartella per salvataggio tabelle e grafici
-cd ..
-mkdir -p results_de_analysis
-
-
 # Ci spostiamo ora sulla CONSOLE
 # Settaggio working directory
 setwd("/workspace/class-rnaseq/analysis_tutoring01")
@@ -173,18 +168,18 @@ df <- as.data.frame(colData(dds)[,c("condition")])
 # [select,] --> seleziona solo le righe corrispondenti ai 20 geni selezionati
 # cluster_cols = FALSE --> disabilita il clustering delle colonne
 # annotation_col = df$condition --> colora le colonne in base alla condizione
-pdf("results_de_analysis/heatmap.pdf")
+pdf("heatmap.pdf")
 pheatmap(assay(ntd)[select,],
          cluster_cols = FALSE, annotation_col = df$condition)
 dev.off()
 
 # Creazione del grafico di PCA per visualizzare la variabilità tra i campioni utilizzando la variabile condition
-pdf("results_de_analysis/plotPCA.pdf")
+pdf("plotPCA.pdf")
 plotPCA(ntd, intgroup = c("condition"))
 dev.off()
 
 # Visualizzazione le stime di dispersione per i dati del modello DESeq2
-pdf("results_de_analysis/plotDispEsts.pdf")
+pdf("plotDispEsts.pdf")
 plotDispEsts(dds)
 dev.off()
 
@@ -212,7 +207,7 @@ resOrdered
 
 
 # Crea un plot di tipo MA per visualizzare il log2foldchange rispetto alla media normalizzata
-pdf("results_de_analysis/plotMA.pdf")
+pdf("plotMA.pdf")
 plotMA(res, ylim = c(-3, 3))
 dev.off()
 
@@ -221,7 +216,7 @@ dev.off()
 # gene = which.min(res$padj) individua e restituisce l'indice del gene con il valore di padj più basso (più significativo)
 # `intgroup` specifica la variabile del design che deve essere utilizzata nel grafico
 # gene ENSG00000160191
-pdf("results_de_analysis/plotCounts.pdf")
+pdf("plotCounts.pdf")
 plotCounts(dds, gene = which.min(res$padj), intgroup = "condition")
 dev.off()
 
@@ -246,14 +241,14 @@ resdata <- resdata %>%
   relocate(gene, .before = everything())
 
 # Salvataggio risultati come file TSV (tab-separated values)
-write_tsv(resdata, "results_de_analysis/results.tsv")
+write_tsv(resdata, "results.tsv")
 
 # Estrazione dei geni significativi (padj < 0.05)
 significant_genes <- as_tibble(resdata %>%
                                  filter(padj < 0.05))
 
 # Salvataggio risultati significativi
-write_tsv(significant_genes, "results_de_analysis/significant_genes.tsv")
+write_tsv(significant_genes, "significant_genes.tsv")
 
 # Salvataggio immagine in caso di chiusura di gitpod
 save.image("tutoring01.RData")
@@ -302,12 +297,12 @@ ego_CC <- enrichGO(gene = sig_genes,
 ego_CC
 
 # Creazione di un dotplot che consente la visualizzazione dei termini GO più significativi (in questo caso relativi alle funzioni molecolari) in base al valore di padj
-pdf("results_de_analysis/dotplot_ego.pdf")
+pdf("dotplot_ego.pdf")
 dotplot(ego_MF, showCategory = 10)
 dev.off()
 
 # Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti (in questo caso relativi alle funzioni molecolari)
-pdf("results_de_analysis/cnetplot_ego.pdf")
+pdf("cnetplot_ego.pdf")
 cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
 
@@ -356,7 +351,7 @@ disgnet = enricher(entrez_genes_sig,
 
 # Creazione di un gene-concept network per visualizzare le relazioni tra le malattie e i geni significativi associati
 # foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)] --> specifica il log2FoldChange per ciascun gene significativo (padj < 0.5)
-pdf("results_de_analysis/cnetplot_disgnet.pdf")
+pdf("cnetplot_disgnet.pdf")
 cnetplot(disgnet, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
 
