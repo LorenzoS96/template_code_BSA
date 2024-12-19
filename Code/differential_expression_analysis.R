@@ -300,7 +300,7 @@ ego_CC <- enrichGO(gene = sig_genes,
                    pvalueCutoff = 0.05)
 ego_CC
 
-# Creazione di un dotplot che consente la visualizzazione dei primi 30 termini GO più significativi in base al valore di padj
+# Creazione di un dotplot che consente la visualizzazione dei termini GO più significativi in base al valore di padj
 pdf("results_de_analysis/dotplot_ego.pdf")
 dotplot(ego_MF, showCategory = 10)
 dev.off()
@@ -367,6 +367,9 @@ dev.off()
 
 
 # Prima di pushare su GitHub rimuoviamo prima le cartelle che contengono file pesanti come le reads
+# Assicuriamo di essere nella correta working directory
+# Tutti i comandi vanno eseguiti dal TERMINALE di RStudio non dalla CONSOLE
+cd /workspace/class-rnaseq/
 rm -rf */.git
 rm -r dataset_tutoring_rnaseq01
 rm -r analysis_tutoring01/reads
