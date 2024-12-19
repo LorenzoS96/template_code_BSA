@@ -3,12 +3,12 @@
 ####################################
 
 
-# Da terminale creazione cartella per salvataggio tabelle e grafici
+# Da TERMINALE creazione cartella per salvataggio tabelle e grafici
 cd ..
 mkdir -p results_de_analysis
 
 
-# Ci spostiamo ora sulla console
+# Ci spostiamo ora sulla CONSOLE
 # Settaggio working directory
 setwd("/workspace/class-rnaseq/analysis_tutoring01")
 
@@ -122,14 +122,14 @@ save.image("tutoring01.RData")
 
 
 # La funzione counts() estrae la matrice di conteggi dal DESeqDataSet
-# rowSums() calcola la somma dei conteggi per ciascun gene su tutti i campioni
+# rowSums() calcola la somma dei conteggi per ciascun gene (righe) su tutti i campioni
 # Vengono mantenuti solo i geni con una somma di conteggi >= 10
 keep <- rowSums(counts(dds)) >= 10
 dds <- dds[keep,]
 
 
-# Impostazione del livello di riferimento per la condizione sperimentale
-# relevel() consente di definire il livello di base (controllo) per la variabile condition
+# Impostazione del livello di riferimento per la condizione sperimentale. Il livello di riferimento è sempre il primo riportato.
+# relevel() consente di definire il livello di base (controllo) per la variabile condition.
 # Importante per l'interpretazione dei risultati, poiché i confronti saranno fatti rispetto al controllo
 dds$condition
 dds$condition <- relevel(dds$condition, ref = "control")
@@ -157,7 +157,7 @@ ntd <- normTransform(dds)
 
 # Selezione dei 20 geni con la media di espressione più alta
 # (counts(dds, normalized = TRUE)) --> estrae la matrice dei conteggi normalizzati dal dds
-# rowMeans() --> calcola la media di ciascuna riga (cioè per ogni gene) nei vari campioni
+# rowMeans() --> calcola la media per ciascun gene (righe) nei vari campioni
 # order() --> restituisce un vettore di indici ordinati in modo decresecente (decreasing = TRUE) in base alla media
 # [1:20] --> seleziona i primi 20 geni dal vettore ordinato (quindi i 20 con la media più alta)
 select <- order(rowMeans(counts(dds, normalized = TRUE)),
@@ -273,6 +273,7 @@ sig_genes <- resdata$gene[which(resdata$padj < 0.05)]
 
 # Analisi di arricchimento che consente di identificare i termini GO (Gene Ontology) rappresentati tra i geni significativi
 # in particolare ci concentriamo sui termini GO relativi ai processi biologici (BP), alle funzioni molecolari (MF) e ai componenti cellulari (CC)
+# modificando ont = "BP", "MF" o "CC" è possibile concentrarsi sulle diverse categorie di Gene Ontology
 ego_BP <- enrichGO(gene = sig_genes,
                    universe = unique(tx2gene$GENEID),
                    OrgDb = org.Hs.eg.db,
@@ -300,12 +301,12 @@ ego_CC <- enrichGO(gene = sig_genes,
                    pvalueCutoff = 0.05)
 ego_CC
 
-# Creazione di un dotplot che consente la visualizzazione dei termini GO più significativi in base al valore di padj
+# Creazione di un dotplot che consente la visualizzazione dei termini GO più significativi (in questo caso relativi alle funzioni molecolari) in base al valore di padj
 pdf("results_de_analysis/dotplot_ego.pdf")
 dotplot(ego_MF, showCategory = 10)
 dev.off()
 
-# Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti
+# Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti (in questo caso relativi alle funzioni molecolari)
 pdf("results_de_analysis/cnetplot_ego.pdf")
 cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
@@ -318,7 +319,7 @@ dev.off()
 
 
 # DisGeNET è un database di associazioni tra malattie e geni
-# Utile per vedere se alcuni dei nostri geni significativi sono già stati descritti in alcune patologie
+# Utile per vedere se i nostri geni significativi sono già stati descritti in alcune patologie
 
 # Lettura del file di associazione tra malattie e geni
 gda <- read_tsv(gzfile("/workspace/class-rnaseq/datasets_reference_only/trascriptome/all_gene_disease_associations.tsv.gz"))
@@ -366,9 +367,9 @@ dev.off()
 ##########
 
 
-# Prima di pushare su GitHub rimuoviamo prima le cartelle che contengono file pesanti come le reads
-# Assicuriamo di essere nella correta working directory
-# Tutti i comandi vanno eseguiti dal TERMINALE di RStudio non dalla CONSOLE
+# Prima di pushare su GitHub rimuoviamo prima le cartelle che contengono file pesanti
+# Assicuriamoci di essere nella correta working directory
+# Tutti i seguenti comandi vanno eseguiti dal TERMINALE di RStudio non dalla CONSOLE
 cd /workspace/class-rnaseq/
 rm -rf */.git
 rm -r dataset_tutoring_rnaseq01
