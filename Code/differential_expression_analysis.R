@@ -107,7 +107,7 @@ head(counts(dds))
 
 # Salvataggio immagine in caso di chiusura di gitpod
 save.image("tutoring01.RData")
-# Per ricaricare l'mmagine comando load("tutoring01.RData")
+# Per ricaricare l'immagine comando load("tutoring01.RData")
 
 
 
