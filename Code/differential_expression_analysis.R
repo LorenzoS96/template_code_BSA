@@ -297,11 +297,13 @@ ego_CC <- enrichGO(gene = sig_genes,
 ego_CC
 
 # Creazione di un dotplot che consente la visualizzazione dei termini GO più significativi (in questo caso relativi alle funzioni molecolari) in base al valore di padj
+# L'opzione showCategory = 10 mostra il numero di categorie significative da mostrare, in questo caso 10
 pdf("dotplot_ego.pdf")
 dotplot(ego_MF, showCategory = 10)
 dev.off()
 
 # Creazione di un gene-concept network per visualizzare la connessione tra i geni e i termini GO arricchiti (in questo caso relativi alle funzioni molecolari)
+# L'opzione showCategory in questo caso è lasciata come default, verrano quindi mostrare le 5 categorie più significative
 pdf("cnetplot_ego.pdf")
 cnetplot(ego_MF, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
@@ -351,6 +353,7 @@ disgnet = enricher(entrez_genes_sig,
 
 # Creazione di un gene-concept network per visualizzare le relazioni tra le malattie e i geni significativi associati
 # foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)] --> specifica il log2FoldChange per ciascun gene significativo (padj < 0.5)
+# L'opzione showCategory in questo caso è lasciata come default, verrano quindi mostrare le 5 categorie più significative
 pdf("cnetplot_disgnet.pdf")
 cnetplot(disgnet, foldChange = resdata$log2FoldChange[which(resdata$padj<0.5)])
 dev.off()
